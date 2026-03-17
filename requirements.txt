@@ -1,0 +1,11 @@
+pandas
+scikit-learn
+lightgbm
+mlflow
+hydra-core
+fastapi
+uvicorn
+pydantic
+python-json-logger
+ruff
+pytest
