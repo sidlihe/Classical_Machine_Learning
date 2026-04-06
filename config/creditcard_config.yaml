@@ -1,0 +1,54 @@
+"""Configuration for creditcard fraud detection."""
+
+data:
+  raw_path: "data/raw"
+  processed_path: "data/processed"
+  splits_path: "data/splits"
+  test_size: 0.2
+  val_size: 0.1
+  random_state: 42
+  target_column: "Class"
+
+preprocessing:
+  handle_missing: "mean"
+  scaling_method: "standard"
+  categorical_encoding: "onehot"
+  handle_outliers: true
+  outlier_method: "iqr"
+  handle_imbalance: true
+  imbalance_method: "smote"
+
+model:
+  model_type: "logistic_regression"
+  random_state: 42
+  n_jobs: -1
+  hyperparameters:
+    C: 1.0
+    max_iter: 1000
+
+training:
+  epochs: 100
+  batch_size: 32
+  learning_rate: 0.001
+  validation_strategy: "stratified_kfold"
+  n_splits: 5
+  early_stopping_patience: 10
+  metric_to_optimize: "f1"
+
+evaluation:
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1"
+    - "roc_auc"
+  create_plots: true
+  plot_types:
+    - "confusion_matrix"
+    - "roc_curve"
+    - "precision_recall"
+
+project_name: "creditcard_fraud"
+experiment_name: "baseline_v1"
+debug: false
+random_state: 42
