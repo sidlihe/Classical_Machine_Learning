@@ -4,11 +4,11 @@ Orchestrates data loading, preprocessing, training, and evaluation.
 """
 
 import argparse
-import sys
+import sys, os
 from pathlib import Path
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import pandas as pd
 import numpy as np
@@ -123,7 +123,9 @@ def main(config_path: str = "config/creditcard_config.yaml"):
     if config.preprocessing.handle_imbalance:
         from imblearn.over_sampling import SMOTE
         
-        smote = SMOTE(random_state=config.random_state, n_jobs=-1)
+        # Some imblearn versions do not support `n_jobs` in SMOTE constructor.
+        # Avoid passing it to maintain compatibility with different environments.
+        smote = SMOTE(random_state=config.random_state)
         X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
         
         logger.info(f"After SMOTE - Train: {y_train_balanced.value_counts().to_dict()}")

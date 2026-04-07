@@ -408,4 +408,12 @@ For questions or issues:
 
 ---
 
+## OWN Conclusion
+MODEL COMPARISON:
+2026-04-07 14:38:42 - src.evaluation.metrics - INFO -                      accuracy  precision    recall        f1       mcc     kappa   roc_auc
+logistic_regression  0.974141   0.057878  0.918367  0.108893  0.227009  0.105999  0.970988
+random_forest        0.999491   0.870968  0.826531  0.848168  0.848204  0.847913  0.978255
+gradient_boosting    0.986956   0.109091  0.918367  0.195016  0.314080  0.192533  0.981793
+xgboost              0.999087   0.688525  0.857143  0.763636  0.767784  0.763184  0.983126
+
 **Built with ❤️ for production-grade ML systems**

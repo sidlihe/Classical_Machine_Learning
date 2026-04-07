@@ -1,4 +1,4 @@
-"""Configuration for creditcard fraud detection."""
+# Configuration for creditcard fraud detection.
 
 data:
   raw_path: "data/raw"

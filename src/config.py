@@ -111,16 +111,45 @@ class Config:
     def from_yaml(cls, config_path: str) -> "Config":
         """Load configuration from YAML file."""
         with open(config_path, 'r') as f:
-            config_dict = yaml.safe_load(f)
-        
-        # Override with environment variables
+            config_dict = yaml.safe_load(f) or {}
+
+        # Override with environment variables (top-level keys only)
         for key, value in os.environ.items():
             if key.startswith('ML_'):
                 config_key = key[3:].lower()
                 if config_key in config_dict:
                     config_dict[config_key] = value
-        
-        return cls(**config_dict)
+
+        # Build nested dataclass instances from nested dicts
+        data_dict = config_dict.get('data', {}) or {}
+        preprocessing_dict = config_dict.get('preprocessing', {}) or {}
+        model_dict = config_dict.get('model', {}) or {}
+        training_dict = config_dict.get('training', {}) or {}
+        evaluation_dict = config_dict.get('evaluation', {}) or {}
+
+        data = DataConfig(**data_dict)
+        preprocessing = PreprocessingConfig(**preprocessing_dict)
+        model = ModelConfig(**model_dict)
+        training = TrainingConfig(**training_dict)
+        evaluation = EvaluationConfig(**evaluation_dict)
+
+        # Collect other top-level settings
+        other_keys = {
+            'project_name': config_dict.get('project_name', cls().project_name),
+            'experiment_name': config_dict.get('experiment_name', cls().experiment_name),
+            'debug': config_dict.get('debug', cls().debug),
+            'random_state': config_dict.get('random_state', cls().random_state),
+            'config_path': config_path,
+        }
+
+        return cls(
+            data=data,
+            preprocessing=preprocessing,
+            model=model,
+            training=training,
+            evaluation=evaluation,
+            **other_keys,
+        )
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert config to dictionary."""

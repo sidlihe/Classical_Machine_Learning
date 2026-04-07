@@ -90,3 +90,10 @@ mlruns/
 .ssh/
 venv/
 __pycache__/
+
+# Ignore config files with sensitive info
+*.db
+*.sqlite
+model_comparison.csv
+registry.json
+*.png

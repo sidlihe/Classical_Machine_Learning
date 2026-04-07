@@ -46,6 +46,7 @@ class ClassificationMetrics:
             "f1": f1_score(y_true, y_pred, zero_division=0),
             "mcc": matthews_corrcoef(y_true, y_pred),
             "kappa": cohen_kappa_score(y_true, y_pred),
+            # "specificity": specificity_score(y_true, y_pred, zero_division=0),
         }
         
         # ROC-AUC (if probabilities available)
