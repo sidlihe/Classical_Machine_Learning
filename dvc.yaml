@@ -1,0 +1,40 @@
+# DVC Pipeline Definition
+stages:
+  prepare:
+    cmd: python scripts/prepare_data.py
+    deps:
+      - data/raw/creditcard_fraud.csv
+    outs:
+      - data/processed/creditcard_processed.csv
+      - data/splits/X_train.pkl
+      - data/splits/X_test.pkl
+      - data/splits/y_train.pkl
+      - data/splits/y_test.pkl
+  
+  train:
+    cmd: python scripts/train.py --config config/creditcard_config.yaml
+    deps:
+      - data/splits/X_train.pkl
+      - data/splits/y_train.pkl
+      - src/
+      - config/creditcard_config.yaml
+    outs:
+      - models/
+    metrics:
+      - models/model_comparison.csv:
+          cache: false
+  
+  evaluate:
+    cmd: python scripts/evaluate.py
+    deps:
+      - data/splits/X_test.pkl
+      - data/splits/y_test.pkl
+      - models/
+    metrics:
+      - models/evaluation_metrics.json:
+          cache: false
+
+plots:
+  - models/model_comparison.csv:
+      x: model
+      y: f1
